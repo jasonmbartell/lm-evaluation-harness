@@ -1,0 +1,15 @@
+description: "The following are multiple choice questions (with answers) about physics. Think step by step and then finish your answer with \"the answer is (X)\" where X is the correct letter choice.\n"
+include: "_default_template_yaml"
+task: "mmlu_pro_physics_gemini"
+task_alias: "physics_gemini"
+process_docs: !function utils.process_physics
+filter_list:
+  - name: "custom-extract"
+    filter:
+      - function: "regex"
+        # Updated regex to match multiple answer formats:
+        # - "the answer is (A)" or "the answer is A"
+        # - "The final answer is $\boxed{A}$"
+        # - "answer is (A)"
+        regex_pattern: '(?:answer is|answer:|boxed\{)\s*[\(\$\\]*([ABCDEFGHIJ])[\)\$\}\\]*'
+      - function: "take_first"
